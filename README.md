@@ -11,7 +11,7 @@ WambiruL
 
 2.git clone https://github.com/WambiruL/blog.git
 
-3 cd pitchApp
+3 cd Blog
 
 4.code . or atom . based on the text editor you have.
 
