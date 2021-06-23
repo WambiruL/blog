@@ -19,6 +19,8 @@ class Post(db.Model):
     post_by = db.Column(db.String)
     comments = db.relationship("Comment",backref = "post",lazy = "dynamic")
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    upvotes = db.Column(db.Integer, default = 0)
+    downvotes = db.Column(db.Integer, default = 0)
 
     def save_post(self):
         db.session.add(self)
@@ -50,6 +52,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(255))
     posts = db.relationship("Post", backref = "user",lazy = "dynamic")
     comments = db.relationship("Comment",backref = "user",lazy = "dynamic")
+    liked = db.relationship("PostLike",backref = "user", lazy = "dynamic")
 
     @property
     def password(self):
@@ -61,6 +64,22 @@ class User(UserMixin, db.Model):
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def like_post(self, post):
+        if not self.has_liked_post(post):
+            like = PostLike(user_id = self.id, post_id = post.id)
+            db.session.add(like)
+
+    def unlike_post(self, post):
+        if self.has_liked_post(post):
+            PostLike.query.filter_by(
+                user_id = self.id,
+                post_id = post.id).delete()
+
+    def has_liked_post(self, post):
+        return PostLike.query.filter(
+            PostLike.user_id == self.id,
+            PostLike.post_id == post.id).count() > 0
 
 
    
@@ -92,5 +111,16 @@ class Comment(db.Model):
     def get_comments(cls,id):
         comments = Comment.query.filter_by(post_id = id).all()
         return comments
+
+class Subscribers(db.Model):
+    __tablename__ = "subscribers"
+    id = db.Column(db.Integer, primary_key = True)
+    email = db.Column(db.String(255), unique = True, index = True)
+
+class PostLike(db.Model):
+    __tablename__ = "post_like"
+    id = db.Column(db.Integer, primary_key = True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    post_id = db.Column(db.Integer, db.ForeignKey("posts.id"))
 
 
