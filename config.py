@@ -20,7 +20,7 @@ class ProdConfig(Config):
     Args:
         Config: The parent configuration class with General configuration settings
     '''
-    pass
+    SQLALCHEMY_DATABASE_URI='postgresql://pjclapijgymmvm:f88dd99bd8d0604d2dbcaa46e9168b89ede46838ff84013dd6d0ce64e518e337@ec2-35-171-250-21.compute-1.amazonaws.com:5432/d1kr1244i5niro'
 
 
 class DevConfig(Config):
