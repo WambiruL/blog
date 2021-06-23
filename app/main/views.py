@@ -4,15 +4,18 @@ from ..models import Post,Comment, User
 from . import main
 from flask_login import current_user
 from datetime import datetime
+from ..requests import get_quote
 from .. import db
 
 
 @main.route("/", methods = ["GET", "POST"])
 def index():
     posts = Post.get_all_posts()
+    quote = get_quote()
+
    
 
-    return render_template("index.html", posts = posts)
+    return render_template("index.html", posts = posts,quote = quote)
 
 @main.route("/post/<int:id>", methods = ["POST", "GET"])
 def post(id):
