@@ -1,6 +1,13 @@
 from. import db
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash,check_password_hash
+from . import login_manager
+
+
+@login_manager.user_loader
+def user_loader(user_id):
+    return User.query.get(int(user_id))
+
 
 class Post(db.Model):
     __tablename__ = "posts"
@@ -10,6 +17,8 @@ class Post(db.Model):
     post_content = db.Column(db.Text)
     posted_at = db.Column(db.DateTime)
     post_by = db.Column(db.String)
+    comments = db.relationship("Comment",backref = "post",lazy = "dynamic")
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
     def save_post(self):
         db.session.add(self)
@@ -40,6 +49,7 @@ class User(UserMixin, db.Model):
     avatar_path = db.Column(db.String())
     password_hash = db.Column(db.String(255))
     posts = db.relationship("Post", backref = "user",lazy = "dynamic")
+    comments = db.relationship("Comment",backref = "user",lazy = "dynamic")
 
     @property
     def password(self):
@@ -56,4 +66,31 @@ class User(UserMixin, db.Model):
    
     def __repr__(self):
         return f"User {self.username}"
+
+class Comment(db.Model):
+    __tablename__ = "comments"
+
+    id = db.Column(db.Integer, primary_key = True)
+    comment = db.Column(db.String)
+    comment_at = db.Column(db.DateTime)
+    comment_by = db.Column(db.String)
+    like_count = db.Column(db.Integer, default = 0)
+    post_id = db.Column(db.Integer, db.ForeignKey("posts.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+
+    def save_comment(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def delete_comment(cls, id):
+        gone = Comment.query.filter_by(id = id).first()
+        db.session.delete(gone)
+        db.session.commit()
+
+    @classmethod
+    def get_comments(cls,id):
+        comments = Comment.query.filter_by(post_id = id).all()
+        return comments
+
 
