@@ -3,6 +3,7 @@ body{
     font-family: 'Flavors', cursive;
     font-size: 30px;
     color: black;
+    text-align:center;
 }
 .masthead{
     position: relative;
@@ -10,7 +11,7 @@ body{
     font-size: 30px;
     display: flex;
     justify-content:center;
-    height: 500px;
+    height: 400px;
     background-image: url('https://picsum.photos/200/300/?blur');
     background-position: center;
     background-repeat: no-repeat;

@@ -1,8 +1,9 @@
+from flask_login.utils import login_required
 from .forms import PostForm,CommentForm, UpdatePostForm
-from flask import render_template, redirect,url_for
-from ..models import Post,Comment, User
+from flask import render_template, redirect,url_for,request
+from ..models import Post,Comment, Subscribers, User
 from . import main
-from flask_login import current_user, UserMixin
+from flask_login import current_user
 from datetime import datetime
 from ..requests import get_quote
 from .. import db
@@ -12,8 +13,10 @@ from .. import db
 def index():
     posts = Post.get_all_posts()
     quote = get_quote()
-
-   
+    if request.method == "POST":
+        new_sub = Subscribers(email = request.form.get("subscriber"))
+        db.session.add(new_sub)
+        db.session.commit()
 
     return render_template("index.html", posts = posts,quote = quote)
 
@@ -38,6 +41,7 @@ def post(id):
     return render_template("post.html",post = post,comments = comments,comment_form = comment_form,comment_count = comment_count)
 
 @main.route("/post/new", methods = ["POST", "GET"])
+@login_required
 def new_post():
     post_form = PostForm()
     if post_form.validate_on_submit():
@@ -52,6 +56,7 @@ def new_post():
     return render_template("new_post.html",post_form = post_form)
 
 @main.route("/post/<int:id>/update", methods = ["POST", "GET"])
+@login_required
 def edit_post(id):
     post = Post.query.filter_by(id = id).first()
     edit_form = UpdatePostForm()
@@ -69,6 +74,7 @@ def edit_post(id):
     return render_template("edit_post.html", post = post,edit_form = edit_form)
 
 @main.route("/profile/<int:id>/<int:post_id>/delete")
+@login_required
 def delete_post(id, post_id):
     user = User.query.filter_by(id = id).first()
     post = Post.query.filter_by(id = post_id).first()
@@ -77,6 +83,7 @@ def delete_post(id, post_id):
     return redirect(url_for("main.profile", id = user.id))
 
 @main.route("/post/<int:id>/<int:comment_id>/delete")
+@login_required
 def delete_comment(id, comment_id):
     post = Post.query.filter_by(id = id).first()
     comment = Comment.query.filter_by(id = comment_id).first()
@@ -85,6 +92,7 @@ def delete_comment(id, comment_id):
     return redirect(url_for("main.post", id = post.id))
 
 @main.route("/post/<int:id>/<int:comment_id>/favourite")
+@login_required
 def fav_comment(id, comment_id):
     post = Post.query.filter_by(id = id).first()
     comment = Comment.query.filter_by(id = comment_id).first()

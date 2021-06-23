@@ -1,2 +1,2 @@
-Welcome to Blog Post
+Welcome to Blog Post{{user.username}}
 We have just seen you have signed up for our application and want to welcome you to the family.

@@ -21,12 +21,12 @@
         {%for post in posts%}
         <div class="post-preview">
           <a href="{{url_for('main.post', id = post.id)}}">
-            <h2 class="post-title">
+            <h2 class="post-title" style="color: seagreen;">
               {{post.post_title}}
             </h2>
-            <h3 class="post-subtitle">
-              {{post.post_content | truncate (45) | safe}}
-              <p class="text-secondary text-center">{{post.posted_at.strftime('%B %d, %Y')}}</p>
+            <h3 class="post-subtitle" style="color: black;">
+              {{post.post_content | truncate (45) | safe}}<br>
+              <em class="text-secondary text-center" style="color: black; font-size:15px;">{{post.posted_at.strftime('%B %d, %Y')}}</em>
             </h3>
            
           </a>
