@@ -1,9 +1,10 @@
 from .forms import PostForm,CommentForm, UpdatePostForm
 from flask import render_template, redirect,url_for
-from ..models import Post,Comment
-from . import main,db
+from ..models import Post,Comment, User
+from . import main
 from flask_login import current_user
 from datetime import datetime
+from .. import db
 
 
 @main.route("/", methods = ["GET", "POST"])
@@ -62,4 +63,29 @@ def edit_post(id):
         return redirect(url_for("main.post", id = post.id))
 
     return render_template("edit_post.html", post = post,edit_form = edit_form)
+
+@main.route("/profile/<int:id>/<int:post_id>/delete")
+def delete_post(id, post_id):
+    user = User.query.filter_by(id = id).first()
+    post = Post.query.filter_by(id = post_id).first()
+    db.session.delete(post)
+    db.session.commit()
+    return redirect(url_for("main.profile", id = user.id))
+
+@main.route("/post/<int:id>/<int:comment_id>/delete")
+def delete_comment(id, comment_id):
+    post = Post.query.filter_by(id = id).first()
+    comment = Comment.query.filter_by(id = comment_id).first()
+    db.session.delete(comment)
+    db.session.commit()
+    return redirect(url_for("main.post", id = post.id))
+
+@main.route("/post/<int:id>/<int:comment_id>/favourite")
+def fav_comment(id, comment_id):
+    post = Post.query.filter_by(id = id).first()
+    comment = Comment.query.filter_by(id = comment_id).first()
+    comment.like_count = 1
+    db.session.add(comment)
+    db.session.commit()
+    return redirect(url_for('main.post', id = post.id))
                         
