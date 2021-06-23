@@ -1,3 +1,29 @@
 body{
-    background-color: aqua;
+    background-color:lightcoral;
+    font-family: 'Flavors', cursive;
+    font-size: 30px;
+    color: black;
+}
+.masthead{
+    position: relative;
+    color:deeppink;
+    font-size: 30px;
+    display: flex;
+    justify-content:center;
+    height: 500px;
+    background-image: url('https://picsum.photos/200/300/?blur');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    align-items: center;
+    border-radius: 50px;
+    
+}
+nav{
+    display: flex;
+    justify-content: space-evenly;
+    color: floralwhite;
+}
+a{
+    color: rgb(212, 201, 201);
 }

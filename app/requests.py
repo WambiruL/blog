@@ -1,5 +1,6 @@
 import requests
-from .app.models import Quote
+from .models import Quote
+
 
 url = "http://quotes.stormconsultancy.co.uk/random.json"
 

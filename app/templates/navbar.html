@@ -1,0 +1,33 @@
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #000;">
+    <a class="navbar-brand" href="/" style="font-family: 'Major Mono Display', monospace; font-size: 30px">BLOG POSTS</a>
+     <a class="nav-link" href="/post/new">Create Post</a>
+       
+      <div class="form-inline my-2 my-lg-0">
+        <ul class="navbar-nav mr-auto">
+          {%if current_user.is_authenticated%}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              Account
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="{{url_for('main.profile', id = current_user.id)}}">Profile</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{{url_for('auth.logout')}}">Logout</a>
+            </div>
+          </li>
+          {%else%}
+          <form class="form-inline my-2 my-lg-0" method="POST">
+            <input class="form-control mr-sm-2" type="email" placeholder="Email" name="subscriber" required>
+            <button class="btn btn-outline-info btn-sm" type="submit" style="padding: 8px;">Subscribe</button>
+          </form>
+          <a class="nav-link" href="/authenticate/login">Login</a>
+         
+          {%endif%}
+        </ul>
+      </div>
+   
+  </nav>
+
+  {%block content%}
+  {%endblock%}
