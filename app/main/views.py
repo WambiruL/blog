@@ -1,7 +1,7 @@
-from .forms import PostForm,CommentForm
+from .forms import PostForm,CommentForm, UpdatePostForm
 from flask import render_template, redirect,url_for
 from ..models import Post,Comment
-from . import main
+from . import main,db
 from flask_login import current_user
 from datetime import datetime
 
@@ -45,4 +45,21 @@ def new_post():
         return redirect(url_for("main.post", id = new_post.id))
     
     return render_template("new_post.html",post_form = post_form)
+
+@main.route("/post/<int:id>/update", methods = ["POST", "GET"])
+def edit_post(id):
+    post = Post.query.filter_by(id = id).first()
+    edit_form = UpdatePostForm()
+
+    if edit_form.validate_on_submit():
+        post.post_title = edit_form.title.data
+        edit_form.title.data = ""
+        post.post_content = edit_form.post.data
+        edit_form.post.data = ""
+
+        db.session.add(post)
+        db.session.commit()
+        return redirect(url_for("main.post", id = post.id))
+
+    return render_template("edit_post.html", post = post,edit_form = edit_form)
                         
