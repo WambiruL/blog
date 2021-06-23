@@ -19,9 +19,9 @@
       <div class="col-lg-8 col-md-10 mx-auto">
 
         {%for post in posts%}
-        <div class="post-preview">
+        <div class="post-preview" style="background:turquoise;">
           <a href="{{url_for('main.post', id = post.id)}}">
-            <h2 class="post-title" style="color: seagreen;">
+            <h2 class="post-title" style="color:white; background-color:deeppink;">
               {{post.post_title}}
             </h2>
             <h3 class="post-subtitle" style="color: black;">

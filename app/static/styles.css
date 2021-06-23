@@ -1,5 +1,8 @@
 body{
-    background-color:lightcoral;
+    background-image: url('./images/giphy\ \(1\).gif');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     font-family: 'Flavors', cursive;
     font-size: 30px;
     color: black;
