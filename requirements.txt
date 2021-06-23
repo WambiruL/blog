@@ -3,7 +3,6 @@ blinker==1.4
 certifi==2021.5.30
 chardet==4.0.0
 click==8.0.1
-dataclasses==0.8
 dnspython==2.1.0
 dominate==2.6.0
 email-validator==1.1.3
